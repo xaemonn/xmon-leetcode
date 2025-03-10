@@ -1,0 +1,55 @@
+class Solution {
+public:
+    
+    long long countOfSubstrings(string word, int k) {
+         map<char, int> vow;   //count of vowels
+        set<char> st={'a','e','i','o','u'};
+        int l = 0,r=0;
+       int len=word.length();
+       int cons=0;  //number of consonants
+       long long ans=0;
+
+
+       vector<int> nextt(len);    // to store idx where next consonant is
+       int nextc=len;
+       for(int i=len-1; i>=0; i--){
+        nextt[i]=nextc;
+          if(st.find(word[i])==st.end()) nextc=i;
+       }
+
+       while(r<len){
+           if(st.find(word[r])==st.end()) {cons++;}
+           else{
+               vow[word[r]]++;
+           } 
+
+           while(cons>k){
+            if(st.find(word[l])==st.end()){
+                cons--;
+            }else{
+                vow[word[l]]--;
+                if(vow[word[l]]==0){
+                    vow.erase(word[l]);
+                }
+            }
+            l++;
+           }
+
+
+           while(l<len && cons==k && vow.size()==5){
+              ans+=nextt[r]-r;
+              if(st.find(word[l])==st.end()){
+                cons--;
+            }else{
+                vow[word[l]]--;
+                if(vow[word[l]]==0){
+                    vow.erase(word[l]);
+                }
+            }
+            l++;
+           }
+           r++;
+       }
+       return ans;
+    }
+};
