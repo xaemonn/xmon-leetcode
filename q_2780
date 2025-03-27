@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int minimumIndex(vector<int>& nums) {
+         map<int,int> mp;
+         int n=nums.size();
+         int maxx=0;
+         int f=0;
+         for(int i=0; i<n ;i++ ){
+            mp[nums[i]]++;
+            if(mp[nums[i]]>f){
+                f=mp[nums[i]];
+                maxx=nums[i];
+            }
+         }
+
+         int cnt=0;
+
+         for(int i=0; i<n ;i++){
+              if(nums[i]==maxx){
+                cnt++;
+              }
+               int len1=i+1;
+               int len2=n-i-1;
+               int f2=f-cnt;
+               if(cnt>len1/2 && f2>len2/2){
+                return i;
+               }
+         }
+
+         return -1;
+
+
+    }
+};
