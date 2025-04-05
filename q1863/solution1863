@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int recur(vector<int>& nums, int idx, int xorr){
+        if(idx==nums.size()){
+            return xorr;
+        }
+        int x=nums[idx];
+        int pick=recur(nums,idx+1,xorr^x);
+        int nott=recur(nums,idx+1,xorr);
+
+        return pick+nott;
+    }
+    int subsetXORSum(vector<int>& nums) {
+         return recur(nums,0,0);
+    }
+};
