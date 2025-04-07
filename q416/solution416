@@ -1,0 +1,39 @@
+class Solution {
+public:
+
+    bool recur(vector<int>& nums,long long& target, long long curr,int idx,vector<vector<int>>& dp){
+        if(curr==target){
+            return true;
+        }
+
+        if(idx>=nums.size()|| curr>target){
+            return false;
+        }
+
+        if(dp[idx][curr]!=-1){
+            return dp[idx][curr];
+        }
+
+        bool pick=recur(nums,target,curr+nums[idx],idx+1,dp);
+        bool nott=recur(nums,target,curr,idx+1,dp);
+
+        return dp[idx][curr]=pick||nott;
+    }
+    bool canPartition(vector<int>& nums) {
+        int n=nums.size();
+        long long sum=0;
+        for(int i=0; i<n ;i++){
+            sum+=nums[i];
+        }
+
+        if(sum%2){
+            return false;
+        }
+
+        long long target=sum/2;
+
+       vector<vector<int>> dp(n,vector<int>(target+1,-1));
+       
+       return recur(nums,target,0,0,dp);
+    }
+};
