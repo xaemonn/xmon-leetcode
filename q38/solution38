@@ -1,0 +1,29 @@
+class Solution {
+public:
+   void function(int num,int n, string&s){
+    if(num>=n){
+        return;
+    }
+    string prev=s;
+    s="";
+    int l=0;
+    int count=0;
+    for(int r=0; r<prev.length(); r++){
+         if(prev[l]!=prev[r]){
+              s+=to_string(count)+prev[l];
+              count=1;
+              l=r;
+         }else{
+            count++;
+         }
+    }
+     s+=to_string(count)+prev[l];
+     return function(num+1,n,s);
+
+   }
+    string countAndSay(int n) {
+        string s="1";
+        function(1,n,s);
+        return s;
+    }
+};
