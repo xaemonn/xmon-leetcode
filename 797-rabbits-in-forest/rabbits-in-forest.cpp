@@ -1,11 +1,19 @@
 class Solution {
 public:
-    int numRabbits(vector<int>& nums, int total = 0) {
-        unordered_map <int,int> mpp;
-        for (int i : nums) mpp[i]++;
+    int numRabbits(vector<int>& answers) {
+        map<int,int> mp;
+        for(auto it:answers){
+            mp[it]++;
+        }
 
-        for (auto& p : mpp)
-        total += ceil((double)p.second / (p.first + 1)) * (p.first + 1);
-        return total;
+        int ans=0;
+        for(auto it:mp){
+            int grp_size=it.first+1;
+            int rabbits=it.second;
+            int groups=ceil((double)rabbits/(double)grp_size);
+            ans+=groups*(grp_size);
+        }
+
+        return ans;
     }
 };
