@@ -1,39 +1,36 @@
 class Solution {
 public:
-    int maxValue(vector<vector<int>>& events, int k) {
-        sort(events.begin(), events.end(), [](const vector<int>& a, const vector<int>& b) {
-            return a[1] < b[1];
-        });
-
-        int n = events.size();
-        vector<vector<int>> dp(n + 1, vector<int>(k + 1, 0));
-
-        for (int i = 1; i <= n; ++i) {
-            int prev = binarySearch(events, events[i - 1][0]);
-
-            for (int j = 1; j <= k; ++j) {
-                dp[i][j] = max(dp[i - 1][j], dp[prev + 1][j - 1] + events[i - 1][2]);
-            }
+    
+    int findNextEvent(vector<vector<int>>& events, int currEnd) {
+        int left = 0, right = events.size();
+        while (left < right) {
+            int mid = (left + right) / 2;
+            if (events[mid][0] > currEnd)
+                right = mid;
+            else
+                left = mid + 1;
         }
-
-        return dp[n][k];
+        return left;
     }
 
-private:
-    int binarySearch(vector<vector<int>>& events, int currentStart) {
-        int left = 0, right = events.size() - 1;
-        int result = -1;
+    int recur(vector<vector<int>>& events, int curr, int left, vector<vector<int>>& dp) {
+        if (left == 0 || curr == events.size()) return 0;
+        if (dp[curr][left] != -1) return dp[curr][left];
 
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if (events[mid][1] < currentStart) {
-                result = mid;
-                left = mid + 1;
-            } else {
-                right = mid - 1;
-            }
-        }
+       
+        int notTake = recur(events, curr + 1, left, dp);
 
-        return result;
+       
+        int next = findNextEvent(events, events[curr][1]);
+        int take = events[curr][2] + recur(events, next, left - 1, dp);
+
+        return dp[curr][left] = max(take, notTake);
+    }
+
+    int maxValue(vector<vector<int>>& events, int k) {
+        sort(events.begin(), events.end()); 
+        int n = events.size();
+        vector<vector<int>> dp(n, vector<int>(k + 1, -1));
+        return recur(events, 0, k, dp);
     }
 };
